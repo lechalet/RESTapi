@@ -24,3 +24,12 @@
 ## Profitez du contenue 
 
 - Lancer votre server symfony à l'aide de la commande `symfony server:start`
+
+## End Point 
+- url/pokemon/new => Create pokemon
+- url/dresseur/new  => Create dresseur
+- url/pokemon/{id} => Show pokemon {id}
+- url/dresseur/{id}  => Show dresseur {id}
+
+- API url pokemon : url/api/pokemon
+- API url dresseur : url/api/dresseur
