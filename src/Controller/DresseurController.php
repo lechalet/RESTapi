@@ -7,6 +7,7 @@ use App\Form\DresseurType;
 use App\Repository\DresseurRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,15 +19,20 @@ class DresseurController extends AbstractController
     /**
      * @Route("/", name="dresseur_index", methods={"GET"})
      */
-    public function index(DresseurRepository $dresseurRepository): Response
+    public function index(DresseurRepository $dresseurRepository, NormalizerInterface $normalizer): Response
     {
-        return $this->render('dresseur/index.html.twig', [
-            'dresseurs' => $dresseurRepository->findAll(),
-        ]);
+        $dresseurs = $dresseurRepository->findAll();
+
+        $dresseursNormalises = $normalizer->normalize($dresseurs);
+
+        $json = json_encode($dresseursNormalises);
+        echo $json;
+        
+        return $this->render('dresseur/index.html.twig');
     }
 
     /**
-     * @Route("/new", name="dresseur_new", methods={"GET","POST"})
+     * @Route("/", name="dresseur_new", methods={"POST"})
      */
     public function new(Request $request): Response
     {
@@ -42,24 +48,28 @@ class DresseurController extends AbstractController
             return $this->redirectToRoute('dresseur_index');
         }
 
-        return $this->render('dresseur/new.html.twig', [
-            'dresseur' => $dresseur,
-            'form' => $form->createView(),
+        $response = new Response($form, 200, [
+            "Content-Type" => "application/json"
         ]);
+        return $response;
     }
 
     /**
      * @Route("/{id}", name="dresseur_show", methods={"GET"})
      */
-    public function show(Dresseur $dresseur): Response
+    public function show(Dresseur $dresseur, NormalizerInterface $normalizer): Response
     {
-        return $this->render('dresseur/show.html.twig', [
-            'dresseur' => $dresseur,
-        ]);
+
+        $dresseursNormalises = $normalizer->normalize($dresseur);
+
+        $json = json_encode($dresseursNormalises);
+        echo $json;
+        
+        return $this->render('dresseur/show.html.twig');
     }
 
     /**
-     * @Route("/{id}/edit", name="dresseur_edit", methods={"GET","POST"})
+     * @Route("/{id}/", name="dresseur_edit", methods={"PUT"})
      */
     public function edit(Request $request, Dresseur $dresseur): Response
     {
@@ -71,11 +81,11 @@ class DresseurController extends AbstractController
 
             return $this->redirectToRoute('dresseur_index');
         }
-
-        return $this->render('dresseur/edit.html.twig', [
-            'dresseur' => $dresseur,
-            'form' => $form->createView(),
+        
+        $response = new Response($form, 200, [
+            "Content-Type" => "application/json"
         ]);
+        return $response;
     }
 
     /**
@@ -89,6 +99,9 @@ class DresseurController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('dresseur_index');
+        $response = new Response($request, 200, [
+            "Content-Type" => "application/json"
+        ]);
+        return $response;
     }
 }
