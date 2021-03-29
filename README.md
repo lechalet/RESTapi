@@ -26,8 +26,8 @@
 - Lancer votre server symfony à l'aide de la commande `symfony server:start`
 
 ## End Point 
-- url/pokemon/new => Create pokemon
-- url/dresseur/new  => Create dresseur
+- url/pokemon => Create pokemon en méthode "POST"
+- url/dresseur  => Create dresseur en méthode "POST"
 - url/pokemon/{id} => Show pokemon {id}
 - url/dresseur/{id}  => Show dresseur {id}
 
